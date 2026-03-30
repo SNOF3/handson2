@@ -1,0 +1,128 @@
+import java.util.Scanner;
+import java.util.Locale;
+
+public class MenuTrabalhoJava {
+
+    public static void main(String[] args) {
+        // Configura o Scanner para aceitar vírgula em números decimais (Padrão BR)
+        Scanner scanner = new Scanner(System.in).useLocale(Locale.forLanguageTag("pt-BR"));
+        int opcao;
+
+        do {
+            System.out.println("\n=========================================");
+            System.out.println("          MENU DE EXERCÍCIOS            ");
+            System.out.println("=========================================");
+            System.out.println("1 - Desenho ASCII (Rostinho)");
+            System.out.println("2 - Calcular Distância entre Coordenadas");
+            System.out.println("3 - Contador de Caracteres");
+            System.out.println("4 - Quiz de Múltipla Escolha");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer do teclado
+
+            switch (opcao) {
+                case 1:
+                    executarExercicio1();
+                    break;
+                case 2:
+                    executarExercicio2(scanner);
+                    break;
+                case 3:
+                    executarExercicio3(scanner);
+                    break;
+                case 4:
+                    executarExercicio4(scanner);
+                    break;
+                case 0:
+                    System.out.println("Encerrando o programa...");
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }
+
+        } while (opcao != 0);
+
+        scanner.close();
+    }
+
+    // --- MÉTODOS DOS EXERCÍCIOS ---
+
+    public static void executarExercicio1() {
+        System.out.println("\n--- EXERCÍCIO 1: DESENHO ASCII ---");
+        System.out.println(" +\"\"\"\"\"+ ");
+        System.out.println("[| o o |]");
+        System.out.println(" |  ^  | ");
+        System.out.println(" | '-' | ");
+        System.out.println(" +-----+ ");
+    }
+
+    public static void executarExercicio2(Scanner input) {
+        System.out.println("\n--- EXERCÍCIO 2: DISTÂNCIA ENTRE PONTOS ---");
+        double raioTerra = 6371.01;
+
+        System.out.print("Latitude da coordenada 1 (ex: 25): ");
+        double x1 = Math.toRadians(input.nextDouble());
+        System.out.print("Longitude da coordenada 1 (ex: 35): ");
+        double y1 = Math.toRadians(input.nextDouble());
+        System.out.print("Latitude da coordenada 2 (ex: 35,5): ");
+        double x2 = Math.toRadians(input.nextDouble());
+        System.out.print("Longitude da coordenada 2 (ex: 25,5): ");
+        double y2 = Math.toRadians(input.nextDouble());
+
+        double distancia = raioTerra * Math.acos(
+                Math.sin(x1) * Math.sin(x2) +
+                Math.cos(x1) * Math.cos(x2) * Math.cos(y1 - y2)
+        );
+
+        System.out.printf("A distância entre esses pontos é: %.10f km\n", distancia);
+    }
+
+    public static void executarExercicio3(Scanner input) {
+        System.out.println("\n--- EXERCÍCIO 3: CONTADOR DE CARACTERES ---");
+        System.out.print("Digite uma frase: ");
+        String entrada = input.nextLine();
+
+        int letras = 0, espacos = 0, numeros = 0, outros = 0;
+
+        for (char c : entrada.toCharArray()) {
+            if (Character.isLetter(c)) letras++;
+            else if (Character.isDigit(c)) numeros++;
+            else if (Character.isSpaceChar(c)) espacos++;
+            else outros++;
+        }
+
+        System.out.println("Letras: " + letras + " | Espaços: " + espacos + 
+                           " | Números: " + numeros + " | Outros: " + outros);
+    }
+
+    public static void executarExercicio4(Scanner input) {
+        System.out.println("\n--- EXERCÍCIO 4: QUIZ ---");
+        int tentativas = 0;
+        boolean acertou = false;
+
+        do {
+            tentativas++;
+            System.out.println("\nQual componente é o 'cérebro' do PC?");
+            System.out.println("a) RAM | b) HD | c) CPU | d) GPU | e) Fonte");
+            System.out.print("Resposta (Tentativa " + tentativas + "/3): ");
+            
+            char resp = input.next().toLowerCase().charAt(0);
+
+            switch (resp) {
+                case 'c':
+                    System.out.println("Resposta correta! Acertou na tentativa: " + tentativas);
+                    acertou = true;
+                    break;
+                case 'a': case 'b': case 'd': case 'e':
+                    System.out.println("Resposta incorreta.");
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        } while (!acertou && tentativas < 3);
+
+        if (!acertou) System.out.println("Resposta incorreta nas 3 tentativas.");
+    }
+}
